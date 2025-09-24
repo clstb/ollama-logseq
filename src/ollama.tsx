@@ -85,11 +85,16 @@ async function ollamaGenerate(prompt: string, parameters?: OllamaGenerateParamet
   params.stream = false
 
   try {
-    const response = await fetch(`http://${logseq.settings.host}/api/generate`, {
+    let headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    if (logseq.settings.authorization_header && logseq.settings.authorization_header.trim() !== "") {
+      headers['Authorization'] = logseq.settings.authorization_header.trim()
+    }
+
+    const response = await fetch(`${logseq.settings.host}/api/generate`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify(params)
     })
     if (!response.ok) {
@@ -105,15 +110,21 @@ async function ollamaGenerate(prompt: string, parameters?: OllamaGenerateParamet
 }
 
 async function promptLLM(prompt: string) {
+  logseq.Editor.exitEditingMode() // Important so the block is identifiable
   if (!logseq.settings) {
     throw new Error("Couldn't find logseq settings");
   }
   try {
-    const response = await fetch(`http://${logseq.settings.host}/api/generate`, {
+    let headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    if (logseq.settings.authorization_header && logseq.settings.authorization_header.trim() !== "") {
+      headers['Authorization'] = logseq.settings.authorization_header.trim()
+    }
+
+    const response = await fetch(`${logseq.settings.host}/api/generate`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({
         model: logseq.settings.model,
         prompt: prompt,

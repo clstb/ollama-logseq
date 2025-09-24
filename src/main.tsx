@@ -43,6 +43,13 @@ let settings: SettingSchemaDesc[] = [
     description: "Define your custom prompt and use a block as context",
     default: "Translate in French : "
   },
+  {
+    key: "authorization_header",
+    type: "string",
+    title: "Authorization header",
+    description: "Set the authorization header if your ollama server requires it",
+    default: ""
+  }
 ]
 
 
